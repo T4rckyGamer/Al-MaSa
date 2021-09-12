@@ -16,7 +16,7 @@ return modadd(msg)
 end
 
 if MsgText[1] == "تعطيل" and not MsgText[2] then
-if not msg.SudoUser then return'💠⁞ هذا الامر يخص المطور فقط .' end
+if not msg.SudoUser then return' 💠⁞ هذا الامر يخص المطور فقط .' end
 GetUserID(msg.sender_user_id_,function(arg,data)
 msg = arg.msg 
 local NameUser   = Hyper_Link_Name(data)
@@ -56,12 +56,12 @@ end
 GetPhotoUser(data.id_,function(arg,data)
 local edited = (redis:get(js..':edited:'..arg.chat_id_..':'..arg.sender_user_id_) or 0)
 
-local KleshaID = '• 𝙉𝘼𝙈𝙀 ➤  '..arg.Namei..'  ┣\n'
-..'• 𝙄𝘿 ➤{'..arg.sender_user_id_..' •\n'
+local KleshaID = 'اسمك  '..arg.Namei..' \n'
+..'ايديك'..arg.sender_user_id_..' \n'
 ..arg.UserNameID
-..'• 𝙎𝙏𝘼𝙏𝙎 ➤'..arg.TheRank..' •\n'
-..'• 𝗠𝗦𝗚  ➤ '..arg.msgs..' •\n'
-..'• 𝘽𝙄𝙊  ➤ '..biouser..' •\n'
+..'رتبتك'..arg.TheRank..' •\n'
+..'رسائلك'..arg.msgs..' •\n'
+..'البايو '..biouser..' •\n'
 local Kleshaidinfo = redis:get(js..":infoiduser_public:"..arg.chat_id_) or redis:get(js..":infoiduser")  
 
 if Kleshaidinfo then 
@@ -127,7 +127,7 @@ end
 
 if MsgText[1] == "تعديلاتي" or MsgText[1] == "سحكاتي" then    
 local numvv = redis:get(js..':edited:'..msg.chat_id_..':'..msg.sender_user_id_) or 0
-return "💠⁞ عدد سحكاتك هو : "..numvv
+return "💠⁞ عدد تعديلاتي هو : "..numvv
 end
 
 
@@ -138,7 +138,7 @@ if not msg.SuperCreator  then return "💠⁞ هذا الامر يخص {المن
 redis:setex(js..":Witing_NewRtba:"..msg.chat_id_..msg.sender_user_id_,1000,true)
 redis:del(js..":Witting_NewRtba2:"..msg.chat_id_..msg.sender_user_id_)
 return [[
-ارسـل الـرتبه الـمراد تغـيرها♡؛
+ارسـل الـرتبه الـمراد تغـيرها؛
 
 مطور اساسي
 مطور
@@ -156,7 +156,7 @@ if MsgText[1] == "مسح الرتبه" then
 if not msg.SuperCreator  then return "💠⁞ هذا الامر يخص {المنشئ الاساسي,المطور} فقط  \n" end
 redis:setex(js..":Witing_DelNewRtba:"..msg.chat_id_..msg.sender_user_id_,1000,true)
 return [[
-ارسـل الـرتبه الـمراد حذفها♡؛
+ارسـل الـرتبه الـمراد حذفها؛
 
 مطور اساسي
 مطور
@@ -462,472 +462,6 @@ end
 return false
 end
 
-
-
-if MsgText[1] == "رفع قرد" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-ReUsername = ResolveUserName(data)
-NameUser = Hyper_Link_Name(data)
-if redis:sismember(js..'salem:'..arg.ChatID,arg.UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه قرد فالمجموعه") 
-else
-redis:hset(js..'username:'..arg.UserID,'username',ReUsername)
-redis:sadd(js..'salem:'..arg.ChatID,arg.UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه قرد في المجموعه") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then  --BY USERNAME
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-if data.type_.user_ and data.type_.user_.type_.ID == "UserTypeBot" then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنني رفع حساب بوت \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-if UserID == our_id then
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا لا يمكنني رفع البوت \n") 
-elseif data.type_.ID == "ChannelChatInfo" then 
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا معرف قناة وليس حساب \n") 
-end
-UserName = arg.UserName
-if redis:sismember(js..'salem:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه قرد في لمجموعه") 
-end
-redis:hset(js..'username:'..UserID,'username',UserName)
-redis:sadd(js..'salem:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه قرد في الجموعه") 
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="raf3salem"})
-end 
-return false
-end
-
-if MsgText[1] == "تنزيل قرد" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-USERNAME = ResolveUserName(data):gsub([[\_]],"_")
-NameUser = Hyper_Link_Name(data)
-if not redis:sismember(js..'salem:'..arg.ChatID,arg.UserID) then 
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قائمة القدره") 
-else
-redis:srem(js..'salem:'..arg.ChatID,arg.UserID)
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيله من قائمه القرده") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-UserName = Flter_Markdown(arg.UserName)
-if not redis:sismember(js..'salem:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قائمه القرده")
-else
-redis:srem(js..'salem:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيله من قائمه القرده") 
-end
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="tnzelsalem"})
-end 
-return false
-end
-
-if MsgText[1] == 'مسح القرده' then
-if not msg.Admin then return "هذا الامر ليس لك عزيزي .  \n" end
-local kerd = redis:scard(js..'salem:'..msg.chat_id_)
-if kerd ==0 then 
-return " لا يوجد قرده في المجموعه " 
-end
-redis:del(js..'salem:'..msg.chat_id_)
-return "*💠⁞︙* بواسطه ⇠ "..msg.TheRankCmd.."   \n  تم مسح {* "..kerd.." *} من قائمه القرده  \n"
-end
-
-if MsgText[1] == "رفع قلبي" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-ReUsername = ResolveUserName(data)
-NameUser = Hyper_Link_Name(data)
-if redis:sismember(js..'salem1:'..arg.ChatID,arg.UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه قلبك") 
-else
-redis:hset(js..'username:'..arg.UserID,'username',ReUsername)
-redis:sadd(js..'salem1:'..arg.ChatID,arg.UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه قلبك فالمجموعه") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then  --BY USERNAME
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-if data.type_.user_ and data.type_.user_.type_.ID == "UserTypeBot" then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنني رفع حساب بوت \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-if UserID == our_id then
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا لا يمكنني رفع البوت \n") 
-elseif data.type_.ID == "ChannelChatInfo" then 
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا معرف قناة وليس حساب \n") 
-end
-UserName = arg.UserName
-if redis:sismember(js..'salem1:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه قلبك") 
-end
-redis:hset(js..'username:'..UserID,'username',UserName)
-redis:sadd(js..'salem1:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه قلبك") 
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="raf3salem1"})
-end 
-return false
-end
-
-if MsgText[1] == "تنزيل قلبي" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-USERNAME = ResolveUserName(data):gsub([[\_]],"_")
-NameUser = Hyper_Link_Name(data)
-if not redis:sismember(js..'salem1:'..arg.ChatID,arg.UserID) then 
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قلبك") 
-else
-redis:srem(js..'salem1:'..arg.ChatID,arg.UserID)
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيله من قلبك") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-UserName = Flter_Markdown(arg.UserName)
-if not redis:sismember(js..'salem1:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قلبك")
-else
-redis:srem(js..'salem1:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيله قلبك في المجموعه") 
-end
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="tnzelsalem1"})
-end 
-return false
-end
-
-if MsgText[1] == 'مسح القلوب' then
-if not msg.Admin then return "هذا الامر ليس لك عزيزي .  \n" end
-local kerd = redis:scard(js..'salem1:'..msg.chat_id_)
-if kerd ==0 then 
-return " لا يوجد قلوب في المجموعه " 
-end
-redis:del(js..'salem1:'..msg.chat_id_)
-return "*💠⁞︙* بواسطه ⇠ "..msg.TheRankCmd.."   \n  تم مسح {* "..kerd.." *} من قائمه القلوب  \n"
-end
-
-if MsgText[1] == "رفع وتكه" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-ReUsername = ResolveUserName(data)
-NameUser = Hyper_Link_Name(data)
-if redis:sismember(js..'salem2:'..arg.ChatID,arg.UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه وتكه") 
-else
-redis:hset(js..'username:'..arg.UserID,'username',ReUsername)
-redis:sadd(js..'salem2:'..arg.ChatID,arg.UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه وتكه في المجموعه") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then  --BY USERNAME
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-if data.type_.user_ and data.type_.user_.type_.ID == "UserTypeBot" then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنني رفع حساب بوت \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-if UserID == our_id then
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا لا يمكنني رفع البوت \n") 
-elseif data.type_.ID == "ChannelChatInfo" then 
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا معرف قناة وليس حساب \n") 
-end
-UserName = arg.UserName
-if redis:sismember(js..'salem2:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه وتكه") 
-end
-redis:hset(js..'username:'..UserID,'username',UserName)
-redis:sadd(js..'salem2:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه وتكه") 
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="raf3salem2"})
-end 
-return false
-end
-
-if MsgText[1] == "تنزيل وتكه" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-USERNAME = ResolveUserName(data):gsub([[\_]],"_")
-NameUser = Hyper_Link_Name(data)
-if not redis:sismember(js..'salem2:'..arg.ChatID,arg.UserID) then 
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قائمه الوتك") 
-else
-redis:srem(js..'salem2:'..arg.ChatID,arg.UserID)
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيله من قائمه الوتك") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-UserName = Flter_Markdown(arg.UserName)
-if not redis:sismember(js..'salem2:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قائمه الوتك")
-else
-redis:srem(js..'salem2:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيل الوتكه من المجموعه") 
-end
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="tnzelsalem2"})
-end 
-return false
-end
-
-if MsgText[1] == 'مسح الوتك' then
-if not msg.Admin then return "هذا الامر ليس لك عزيزي .  \n" end
-local kerd = redis:scard(js..'salem2:'..msg.chat_id_)
-if kerd ==0 then 
-return " لا يوجد وتك في المجموعه كلهم غفر " 
-end
-redis:del(js..'salem2:'..msg.chat_id_)
-return "*💠⁞︙* بواسطه ⇠ "..msg.TheRankCmd.."   \n  تم مسح {* "..kerd.." *} من قائمه الوتك  \n"
-end
-
-if MsgText[1] == "رفع زوجتي" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-ReUsername = ResolveUserName(data)
-NameUser = Hyper_Link_Name(data)
-if redis:sismember(js..'salem3:'..arg.ChatID,arg.UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه زوجتك") 
-else
-redis:hset(js..'username:'..arg.UserID,'username',ReUsername)
-redis:sadd(js..'salem3:'..arg.ChatID,arg.UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعها زوجتك فالمجموعه ارفع راسنا") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then  --BY USERNAME
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-if data.type_.user_ and data.type_.user_.type_.ID == "UserTypeBot" then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنني رفع حساب بوت \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-if UserID == our_id then
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا لا يمكنني رفع البوت \n") 
-elseif data.type_.ID == "ChannelChatInfo" then 
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا معرف قناة وليس حساب \n") 
-end
-UserName = arg.UserName
-if redis:sismember(js..'salem3:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعها زوجتك") 
-end
-redis:hset(js..'username:'..UserID,'username',UserName)
-redis:sadd(js..'salem3:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعها زوجتك ارفع راسنا") 
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="raf3salem1"})
-end 
-return false
-end
-
-if MsgText[1] == "تنزيل زوجتي" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-USERNAME = ResolveUserName(data):gsub([[\_]],"_")
-NameUser = Hyper_Link_Name(data)
-if not redis:sismember(js..'salem3:'..arg.ChatID,arg.UserID) then 
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيل زوجتك") 
-else
-redis:srem(js..'salem3:'..arg.ChatID,arg.UserID)
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيلها من قائمه زوجاتك") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-UserName = Flter_Markdown(arg.UserName)
-if not redis:sismember(js..'salem3:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيلها من قائمه زوجاتك")
-else
-redis:srem(js..'salem3:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيلها من قائمه زوجاتك") 
-end
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="tnzelsalem3"})
-end 
-return false
-end
-
-if MsgText[1] == 'مسح زوجاتي' then
-if not msg.Admin then return "هذا الامر ليس لك عزيزي .  \n" end
-local kerd = redis:scard(js..'salem3:'..msg.chat_id_)
-if kerd ==0 then 
-return " لا يوجد لك زوجات فالمجموعه  " 
-end
-redis:del(js..'salem3:'..msg.chat_id_)
-return "*💠⁞︙* بواسطه ⇠ "..msg.TheRankCmd.."   \n  تم مسح {* "..kerd.." *} من قائمه زوجاتك  \n"
-end
-
-if MsgText[1] == "رفع زوجي" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-ReUsername = ResolveUserName(data)
-NameUser = Hyper_Link_Name(data)
-if redis:sismember(js..'salem4:'..arg.ChatID,arg.UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه زوجك") 
-else
-redis:hset(js..'username:'..arg.UserID,'username',ReUsername)
-redis:sadd(js..'salem4:'..arg.ChatID,arg.UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه زوجك") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then  --BY USERNAME
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-if data.type_.user_ and data.type_.user_.type_.ID == "UserTypeBot" then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنني رفع حساب بوت \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-if UserID == our_id then
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا لا يمكنني رفع البوت \n") 
-elseif data.type_.ID == "ChannelChatInfo" then 
-return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا معرف قناة وليس حساب \n") 
-end
-UserName = arg.UserName
-if redis:sismember(js..'salem4:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد رفعه  زوجك") 
-end
-redis:hset(js..'username:'..UserID,'username',UserName)
-redis:sadd(js..'salem4:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم رفعه زوجك") 
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="raf3salem4"})
-end 
-return false
-end
-
-if MsgText[1] == "تنزيل زوجي" then
-if not MsgText[2] and msg.reply_id then
-GetMsgInfo(msg.chat_id_,msg.reply_id,function(arg,data)
-if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  عذرا هذا العضو ليس موجود ضمن المجموعات \n") end
-local UserID = data.sender_user_id_
-if UserID == our_id then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لا يمكنك تنفيذ الامر بالرد ع رسالة البوت \n") end
-GetUserID(UserID,function(arg,data)
-USERNAME = ResolveUserName(data):gsub([[\_]],"_")
-NameUser = Hyper_Link_Name(data)
-if not redis:sismember(js..'salem4:'..arg.ChatID,arg.UserID) then 
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قائمه ازواجك") 
-else
-redis:srem(js..'salem4:'..arg.ChatID,arg.UserID)
-sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيله من قائمه ازواجك") 
-end
-end,{ChatID=arg.ChatID,UserID=UserID,MsgID=arg.MsgID})
-end,{ChatID=msg.chat_id_,MsgID=msg.id_})
-
-
-elseif MsgText[2] and MsgText[2]:match('@[%a%d_]+') then
-GetUserName(MsgText[2],function(arg,data)
-if not data.id_ then return sendMsg(arg.ChatID,arg.MsgID,"⌔︙  لآ يوجد عضـو بهہ‌‏ذآ آلمـعرف \n") end 
-local UserID = data.id_
-NameUser = Hyper_Link_Name(data)
-UserName = Flter_Markdown(arg.UserName)
-if not redis:sismember(js..'salem4:'..arg.ChatID,UserID) then 
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم بالتأكيد تنزيله من قائمه ازواجك")
-else
-redis:srem(js..'salem4:'..arg.ChatID,UserID)
-return sendMsg(arg.ChatID,arg.MsgID,"*💠⁞︙* المستخدم  ⇠「 "..NameUser.." 」 \n*💠⁞︙* تم تنزيله من قائمه ازواجك") 
-end
-end,{ChatID=msg.chat_id_,MsgID=msg.id_,UserName=MsgText[2]})
-elseif MsgText[2] and MsgText[2]:match('^%d+$') then
-GetUserID(MsgText[2],action_by_id,{msg=msg,cmd="tnzelsalem4"})
-end
-return false
-end
-
-if MsgText[1] == 'مسح ازواجي' then
-if not msg.Admin then return "هذا الامر ليس لك عزيزي .  \n" end
-local kerd = redis:scard(js..'salem4:'..msg.chat_id_)
-if kerd ==0 then 
-return " لا يوجد لك ازواج في المجموعه يا عانسه" 
-end
-redis:del(js..'salem4:'..msg.chat_id_)
-return "*💠⁞︙* بواسطه ⇠ "..msg.TheRankCmd.."   \n  تم مسح {* "..kerd.." *} من قائمه ازواجك  \n"
-end
 
 if MsgText[1] == "رفع مميز" then
 if not msg.Admin then return "💠⁞ هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n" end
@@ -1400,8 +934,8 @@ if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ ع
 local UserID = data.sender_user_id_
 if UserID == our_id then   
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد البوت ؛") 
-elseif UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
-return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد *مطورين الالماسـه*؛") 
+elseif UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
+return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد *مطورين ياقوت*؛") 
 elseif UserID == SUDO_ID then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد المطور الاساسي ؛") 
 elseif redis:sismember(js..':SUDO_BOT:',UserID) then 
@@ -1442,8 +976,8 @@ UserName = arg.UserName
 NameUser = Hyper_Link_Name(data)
 if UserID == our_id then   
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد البوت ؛") 
-elseif UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
-return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد *مطورين الالماسـه*؛") 
+elseif UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
+return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد *مطورين ياقوت*؛") 
 elseif UserID == SUDO_ID then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك طرد المطور الاساسي ؛") 
 elseif redis:sismember(js..':SUDO_BOT:',UserID) then 
@@ -1491,8 +1025,8 @@ if UserID == our_id then
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر البوت ؛") 
 elseif UserID == SUDO_ID then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر المطور الاساسي ؛") 
-elseif UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
-return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر *مطورين الالماسـه* ؛") 
+elseif UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
+return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر *مطورين ياقوت* ؛") 
 elseif redis:sismember(js..':SUDO_BOT:',UserID) then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر المطور ؛") 
 elseif redis:sismember(js..':MONSHA_BOT:'..arg.ChatID,UserID) then 
@@ -1545,8 +1079,8 @@ if UserID == our_id then
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر البوت ؛") 
 elseif UserID == SUDO_ID then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر المطور الاساسي ؛") 
-elseif UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
-return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر *مطورين الالماسـه* ؛") 
+elseif UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
+return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر *مطورين ياقوت* ؛") 
 elseif redis:sismember(js..':SUDO_BOT:',UserID) then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر المطور ؛") 
 elseif redis:sismember(js..':MONSHA_BOT:'..arg.ChatID,UserID) then 
@@ -1776,8 +1310,8 @@ if UserID == our_id then
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك كتم البوت  ؛") 
 elseif UserID == SUDO_ID then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك كتم المطور الاساسي ؛") 
-elseif UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
-return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك كتم *مطورين الالماسـه* ؛") 
+elseif UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
+return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك كتم *مطورين ياقوت* ؛") 
 elseif redis:sismember(js..':SUDO_BOT:',UserID) then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك كتم المطور ؛") 
 elseif redis:sismember(js..':MONSHA_BOT:'..arg.ChatID,UserID) then 
@@ -2061,9 +1595,9 @@ end
 return "💠⁞ تم مسح جميع الوسائط المجدوله" 
 end
 
-if MsgText[1] == "مسح التعديلات"  or MsgText[1] == "مسح سحكاتي" or MsgText[1] == "مسح تعديلاتي" then    
+if MsgText[1] == "مسح التعديلات"  or MsgText[1] == "مسح التعديلاتي" or MsgText[1] == "مسح تعديلاتي" then    
 redis:del(js..':edited:'..msg.chat_id_..':'..msg.sender_user_id_)
-return "💠⁞ تم مسح جميع سحكاتك" 
+return "💠⁞ تم مسح جميع تعديلاتك" 
 end
 
 if MsgText[1] == "مسح الادمنيه" then 
@@ -2421,22 +1955,6 @@ if not msg.Admin then return "💠⁞ هذا الامر يخص {الادمن,ا�
 return whitelist(msg) 
 end
 
-if MsgText[1] == "قائمه القرده" then 
-return salem(msg) 
-end
-if MsgText[1] == "قائمه القلوب" then 
-return salem1(msg) 
-end
-if MsgText[1] == "قائمه الوتك" then 
-return salem2(msg) 
-end
-if MsgText[1] == "قائمه زوجاتي" then 
-return salem3(msg) 
-end
-if MsgText[1] == "قائمه ازواجي" then 
-return salem4(msg) 
-end
-
 if MsgText[1] == "طرد البوتات" then
 if not msg.Director then return "💠⁞ هذا الامر يخص {المطور,المنشئ} فقط  \n" end
 tdcli_function({ID="GetChannelMembers",channel_id_ = msg.chat_id_:gsub('-100',''),filter_={ID="ChannelMembersBots"},offset_=0,limit_=50},
@@ -2739,7 +2257,7 @@ local Get_info =  "⠀\n⠀- ┫ { الاحـصـائـيـات الـرسـائ
 .."- الـصـوت ┫ { `"..audio.."` } ┣\n"
 .."- الـفـيـديـو ┫ { `"..video.."` } ┣\n"
 .."- الـتـعـديـل ┫ { `"..edited.."` } ┣\n\n"
-.."- تـفـاعـلـك  ┫ "..Get_Ttl(msgs).." ┣\n"
+.."- تـفـاعـلـك  ┫  "..Get_Ttl(msgs).." ┣\n"
 .."ـ.——————————\n"
 return sendMsg(arg.chat_id_,arg.id_,Get_info)    
 end,{chat_id_=msg.chat_id_,id_=msg.id_})
@@ -2798,17 +2316,6 @@ return false
 end
 
 
-if msg.Director then
-if MsgText[1] == 'تفعيل ضافني' then 
-redis:del(js..":Added:Me:"..msg.chat_id_)  
-sendMsg(msg.chat_id_,msg.id_,'💠⁞ تم تفعيل امر مين ضافني')
-end
-if MsgText[1] == 'تعطيل ضافني' then  
-redis:set(js..":Added:Me:"..msg.chat_id_,true)    
-sendMsg(msg.chat_id_,msg.id_,'💠⁞ تم تعطيل امر مين ضافني')
-end
-end
-
 if MsgText[1] == "تفعيل الردود العشوائيه" 	then return unlock_replayRn(msg) end
 if MsgText[1] == "تفعيل الردود" 	then return unlock_replay(msg) end
 if MsgText[1] == "تفعيل الايدي" 	then return unlock_ID(msg) end
@@ -2857,7 +2364,7 @@ return [[
 - `{التفاعل}` : لوضع تفاعل المستخدم 
 - `{الرسائل}` : لاظهار عدد الرسائل 
 - `{النقاط}` : لاظهار عدد النقاط 
-- `{التعديل}` : لاظهار عدد السحكات 
+- `{التعديل}` :  عدد تعديلاتي 
 - `{البوت}` : لاظهار اسم البوت
 - `{المطور}` : لاظهار معرف المطور الاساسي
 - `{الردود}` : لاظهار ردود عشوائيه .
@@ -3139,7 +2646,7 @@ NameUser = Hyper_Link_Name(data)
 msg = arg.msg
 UserID = msg.UserID
 if UserID == our_id then return sendMsg(msg.chat_id_,msg.id_,"♔ لا يمكنك تنفيذ الامر مع البوت\n") end
-if UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then return sendMsg(msg.chat_id_,msg.id_,"♔ لا يمكنك تنفيذ الامر ضد *مطورين الالماسـه* \n") end
+if UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then return sendMsg(msg.chat_id_,msg.id_,"♔ لا يمكنك تنفيذ الامر ضد *مطورين ياقوت* \n") end
 
 if UserID == SUDO_ID then 
 rinkuser = 1
@@ -3254,7 +2761,7 @@ local UserID = data.id_
 if UserID == our_id then return sendMsg(msg.chat_id_,msg.id_,"♔ لا يمكنك تنفيذ الامر مع البوت ") end
 
 msg = arg.msg
-if UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then return sendMsg(msg.chat_id_,msg.id_,"♔ لا يمكنك تنفيذ الامر ضد *مطورين الالماسـه* ") end
+if UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then return sendMsg(msg.chat_id_,msg.id_,"♔ لا يمكنك تنفيذ الامر ضد *مطورين الالماسـه* ") end
 NameUser = Hyper_Link_Name(data)
 
 if UserID == SUDO_ID then 
@@ -3792,7 +3299,7 @@ if not data.sender_user_id_ then return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ ع
 local UserID = data.sender_user_id_
 if UserID == our_id then   
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر البوت ؛") 
-elseif  UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
+elseif  UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر *مطورين الالماسـه* ؛")
 elseif UserID == SUDO_ID then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر المطور الاساسي ؛")
@@ -3823,7 +3330,7 @@ NameUser = Hyper_Link_Name(data)
 
 if UserID == our_id then   
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر البوت ؛") 
-elseif  UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
+elseif  UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر *مطورين الالماسـه* ؛")
 elseif UserID == SUDO_ID then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر المطور الاساسي ؛")
@@ -3938,11 +3445,11 @@ end
 
 
 if MsgText[1] == 'اصدار السورس' or MsgText[1] == 'الاصدار' then
-return'💠⁞ اصدار سورس الالماسـه : *v'..version..'* '
+return'💠⁞ اصدار سورس ياقوت : *v'..version..'* '
 end
 
 if MsgText[1] == 'اصدار السورس' or MsgText[1] == 'الاصدار' then
-return '⌯⁞ اصدار سورس الماسـه*v'..version..'* \n'
+return '⌯⁞ اصدار سورس ياقوت*v'..version..'* \n'
 end
 
 if (MsgText[1] == 'تحديث السورس' or MsgText[1] == 'تحديث السورس ™') then
@@ -3955,7 +3462,7 @@ sendMsg(msg.chat_id_,msg.id_,' ⌯⁞  يوجد تحديث جديد الان \n 
 redis:set(js..":VERSION",GetVerison)
 return false
 else
-return "⌯⁞ الاصدار الحالي : *v"..version.."* \n ⌯⁞  لديـك احدث اصدار\n - [MaSa](t.me/diamondsabot)"
+return "⌯⁞ الاصدار الحالي : *v"..version.."* \n ⌯⁞  لديـك احدث اصدار\n - [Yakot](t.me/YaqotSa1)"
 end
 return false
 end
@@ -4015,8 +3522,8 @@ end
 if MsgText[1]== "ايدي" and msg.type == "pv" then return  "\n"..msg.sender_user_id_.."\n"  end
 
 if MsgText[1]== "قناة السورس" and msg.type == "pv" then
-local inline = {{{text="قناه‏‏ السـورس : الماسـه ",url="t.me/diamondsabot"}}}
-send_key(msg.sender_user_id_,'  [قناة السورس: الماسـه](t.me/diamondsabot)',nil,inline,msg.id_)
+local inline = {{{text="قناه‏‏ السـورس : ياقوت ",url="t.me/YaqotSa1"}}}
+send_key(msg.sender_user_id_,'  [قناة السورس: ياقوت](t.me/YaqotSa1)',nil,inline,msg.id_)
 return false
 end
 
@@ -4478,29 +3985,6 @@ return false
 end
 
 
-if MsgText[1]== 'مين ضافني' then
-if not redis:get(js..":Added:Me:"..msg.chat_id_) then
-tdcli_function ({ID = "GetChatMember",chat_id_ = msg.chat_id_,user_id_ = msg.sender_user_id_},function(arg,da) 
-if da and da.status_.ID == "ChatMemberStatusCreator" then
-sendMsg(msg.chat_id_,msg.id_,'*💠⁞  انت منشئ المجموعه *') 
-return false
-end
-local Added_Me = redis:get(js..":Added:Me:Who:Added:Me"..msg.chat_id_..':'..msg.sender_user_id_)
-if Added_Me then 
-tdcli_function ({ID = "GetUser",user_id_ = Added_Me},function(extra,result,success)
-local Name = '['..result.first_name_..'](tg://user?id='..result.id_..')'
-Text = '*💠⁞ الشخص الذي قام باضافتك هو * '..Name
-sendMsg(msg.chat_id_,msg.id_,Text) 
-end,nil)
-else
-sendMsg(msg.chat_id_,msg.id_,'*💠⁞ انت دخلت عبر الرابط*') 
-end
-end,nil)
-else
-sendMsg(msg.chat_id_,msg.id_,'*💠⁞ امر مين ضافني تم تعطيله من قبل المدراء *') 
-end
-end
-
 if MsgText[1]== 'م3' then
 if not msg.Admin then return "💠⁞ هذا الامر يخص {الادمن,المدير,المنشئ,المطور} فقط  \n" end
 SUDO_USER = redis:hgetall(js..'username:'..SUDO_ID).username
@@ -4677,7 +4161,7 @@ return false
 end
 
 
-if MsgText[1] == "مغادره" or MsgText[1] == "ادفرني" or MsgText[1] == "احظرني" or MsgText[1] == "اطردني" then
+if MsgText[1] == "مغادره" or MsgText[1] == "طلعني" or MsgText[1] == "احظرني" or MsgText[1] == "اطردني" then
 if msg.Admin then return "💠⁞ لا استطيع طرد المدراء والادمنيه والمنشئين  \n" end
 if not redis:get(js.."lock_leftgroup"..msg.chat_id_) then  return "💠⁞ امر المغادره معطل من قبل اداره المجموعة  \n" end
 kick_user(msg.sender_user_id_,msg.chat_id_,function(arg,data)
@@ -4704,8 +4188,8 @@ if MsgText[1] == "سورس" or MsgText[1]=="السورس" then
 return [[
 *[+] TEAM MaSa*
 
-*~* [𝗖𝗵](T.ME/diamondsabot) *,*
-*~* [𝗗𝗲𝘃](T.ME/khl1404k) *.*
+*~* [𝗖𝗵](T.ME/YaqotSa1) *,*
+*~* [𝗗𝗲𝘃](T.ME/PROTECTmnbot) *.*
 ]]
 end
 if MsgText[1] == "متجر الملفات" or MsgText[1]:lower() == "/store"  then
@@ -4899,7 +4383,7 @@ end
 text = [[: *مـرحبا انا* []]..redis:get(js..':NameBot:')..[[]
 
 *-* اختصاصي إدارة المجموعات من السبام والخ..
-*-* لدي مًميزات مثل {كت تويت,أغاني,يوتيوب...}, 
+*-* لدي مًميزات حمايه قويه
 *-* لتفعيلي ارفعني مشرف وارسل تفعيل.]]
 GetUserID(msg.sender_user_id_,function(arg,data)
 if data.last_name_ then Name = data.first_name_ .." "..data.last_name_ else Name = data.first_name_ end
@@ -4942,7 +4426,7 @@ local UserID = data.id_
 NameUser = Hyper_Link_Name(data)
 if data.type_.ID == "ChannelChatInfo" then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ عذرا هذا معرف قناة وليس حساب ؛") 
-elseif UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
+elseif UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
 return sendMsg(arg.ChatID,arg.MsgID,"💠⁞ لا يمكنك حظر *مطورين الالماسـه* ؛") 
 end
 
@@ -4966,8 +4450,8 @@ if not data.id_ then return sendMsg(ChatID,MsgID,"💠⁞ العضو لا يوج
 local UserID = data.id_
 local Resolv = ResolveUserName(data)
 NameUser = Hyper_Link_Name(data)
-if UserID == 1714422669 or UserID == 1755055191 or UserID == 932948575 or UserID == 127952353 then 
-return sendMsg(ChatID,MsgID,"💠⁞ لا يمكنك حظر *مطورين الالماسـه* ؛") 
+if UserID == 909279851 or UserID == 1914682457 or UserID == 1445405724 or UserID == 557011602 then 
+return sendMsg(ChatID,MsgID,"💠⁞ لا يمكنك حظر *مطورين ياقوت* ؛") 
 end
 if redis:sismember(js..'bannedpv',UserID) then 
 return sendMsg(ChatID,MsgID,"💠⁞ المستخدم  ⌯⁞「 "..NameUser.." 」 \n-  تم بالتاكيد حظره  من التواصل ") 
@@ -5038,7 +4522,7 @@ if msg.text  == "حظر" then
 GetUserID(FwdUser,function(arg,data)
 if data.username_ then USERNAME = '@'..data.username_ else USERNAME = FlterName(data,20) end
 if FwdUser == 656329268 then 
-return sendMsg(arg.ChatID,arg.id_,"- لا يمكنك حظر *مطورين الالماسـه* ؛") 
+return sendMsg(arg.ChatID,arg.id_,"- لا يمكنك حظر *مطورين ياقوت* ؛") 
 end
 redis:hset(js..'username:'..arg.FwdUser,'username',USERNAME)
 if redis:sismember(js..'bannedpv',FwdUser) then 
@@ -6111,14 +5595,14 @@ local edited = (redis:get(js..':edited:'..msg.chat_id_..':'..msg.adduser) or 0)
 local points = redis:get(js..':User_Points:'..msg.chat_id_..msg.adduser) or 0
 local msgs = redis:get(js..'msgs:'..msg.adduser..':'..msg.chat_id_) or 1
 
-if msg.adduser ==  1714422669 then 
-gtupe = 'سـالِم' 
-elseif msg.adduser ==  1755055191 then 
-gtupe = 'الكندي' 
-elseif msg.adduser ==  932948575 then 
-gtupe = 'أبــو ريــان' 
-elseif msg.adduser ==  127952353 then 
-gtupe = 'عبــداللـه' 
+if msg.adduser ==  557011602 then 
+gtupe = 'مطور ياقوت' 
+elseif msg.adduser ==  1445405724 then 
+gtupe = 'مطور ياقوت' 
+elseif msg.adduser ==  1914682457 then 
+gtupe = 'مطور ياقوت' 
+elseif msg.adduser ==  909279851 then 
+gtupe = 'أبوتركي' 
 elseif msg.adduser == SUDO_ID then 
 gtupe = 'المطور الاساسي' 
 elseif redis:sismember(js..':SUDO_BOT:',msg.adduser) then 
@@ -6961,560 +6445,29 @@ end
 if msg.text and redis:get(js.."lock_rdodSource"..msg.chat_id_) then
 
 --================================{{  Reply Bot  }} ===================================
-local hhh = {
-"* جماد بحرف ⏎ ر  *", 
-"* مدينة بحرف ⏎ ع  *",
-"* حيوان ونبات بحرف ⏎ خ  *", 
-"* اسم بحرف ⏎ ح  *", 
-"* اسم ونبات بحرف ⏎ م  *", 
-"* دولة عربية بحرف ⏎ ق  *", 
-"* جماد بحرف ⏎ ي  *", 
-"* نبات بحرف ⏎ ج  *", 
-"* اسم بنت بحرف ⏎ ع  *", 
-"* اسم ولد بحرف ⏎ ع  *", 
-"* اسم بنت وولد بحرف ⏎ ث  *", 
-"* جماد بحرف ⏎ ج  *",
-"* حيوان بحرف ⏎ ص  *",
-"* دولة بحرف ⏎ س  *",
-"* نبات بحرف ⏎ ج  *",
-"* مدينة بحرف ⏎ ب  *",
-"* نبات بحرف ⏎ ر  *",
-"* اسم بحرف ⏎ ك  *",
-"* حيوان بحرف ⏎ ظ  *",
-"* جماد بحرف ⏎ ذ  *",
-"* مدينة بحرف ⏎ و  *",
-"* اسم بحرف ⏎ م  *",
-"* اسم بنت بحرف ⏎ خ  *",
-"* اسم و نبات بحرف ⏎ ر  *",
-"* نبات بحرف ⏎ و  *",
-"* حيوان بحرف ⏎ س  *",
-"* مدينة بحرف ⏎ ك  *",
-"* اسم بنت بحرف ⏎ ص  *",
-"* اسم ولد بحرف ⏎ ق  *",
-"* نبات بحرف ⏎ ز  *",
-"*  جماد بحرف ⏎ ز  *",
-"*  مدينة بحرف ⏎ ط  *",
-"*  جماد بحرف ⏎ ن  *",
-"*  مدينة بحرف ⏎ ف  *",
-"*  حيوان بحرف ⏎ ض  *",
-"*  اسم بحرف ⏎ ك  *",
-"*  نبات و حيوان و مدينة بحرف ⏎ س  *", 
-"*  اسم بنت بحرف ⏎ ج  *", 
-"*  مدينة بحرف ⏎ ت  *", 
-"*  جماد بحرف ⏎ ه  *", 
-"*  اسم بنت بحرف ⏎ ر  *", 
-"* اسم ولد بحرف ⏎ خ  *", 
-"* جماد بحرف ⏎ ع  *",
-"* حيوان بحرف ⏎ ح  *",
-"* نبات بحرف ⏎ ف  *",
-"* اسم بنت بحرف ⏎ غ  *",
-"* اسم ولد بحرف ⏎ و  *",
-"* نبات بحرف ⏎ ل  *",
-"*مدينة بحرف ⏎ ع  *",
-"*دولة واسم بحرف ⏎ ب  *",
-}
-local drok = {
-"*أكثر جملة أثرت بك في حياتك؟ *",
-"*إيموجي يوصف مزاجك حاليًا؟ *",
-"*أجمل اسم بنت بحرف الباء؟ *",
-"*كيف هي أحوال قلبك؟ *",
-"*أجمل مدينة؟ *",
-"*كيف كان أسبوعك؟ *",
-"*شيء تشوفه اكثر من اهلك ؟ *",
-"*اخر مره فضفضت؟ *",
-"*قد كرهت احد بسبب اسلوبه؟ *",
-"*قد حبيت شخص وخذلك؟ *",
-"*كم مره حبيت؟ *",
-"*اكبر غلطة بعمرك؟ *",
-"*نسبة النعاس عندك حاليًا؟ *",
-"*شرايكم بمشاهير التيك توك؟ *",
-"*ما الحاسة التي تريد إضافتها للحواس الخمسة؟ *",
-"*اسم قريب لقلبك؟ *",
-"*مشتاق لمطعم كنت تزوره قبل الحظر؟ *",
-"*أول شيء يخطر في بالك إذا سمعت كلمة (ابوي يبيك)؟ *",
-"*ما أول مشروع تتوقع أن تقوم بإنشائه إذا أصبحت مليونير؟ *",
-"*أغنية عالقة في ذهنك هاليومين؟ *",
-"*متى اخر مره قريت قرآن؟ *",
-"*كم صلاة فاتتك اليوم؟ *",
-"*تفضل التيكن او السنقل؟ *",
-"*وش أفضل بوت برأيك؟ *",
-"*كم لك بالتلي؟ *",
-"*وش الي تفكر فيه الحين؟ *",
-"*كيف تشوف الجيل ذا؟ *",
-"*منشن شخص وقوله، تحبني؟ *",
-"*لو جاء شخص وعترف لك كيف ترده؟ *",
-"*مر عليك موقف محرج؟ *",
-"*وين تشوف نفسك بعد سنتين؟ *",
-"*لو فزعت/ي لصديق/ه وقالك مالك دخل وش بتسوي/ين؟ *",
-"*وش اجمل لهجة تشوفها؟ *",
-"*قد سافرت؟ *",
-"*افضل مسلسل عندك؟ *",
-"*افضل فلم عندك؟ *",
-"*مين اكثر يخون البنات/العيال؟ *",
-"*متى حبيت؟ *",
-"*بالعادة متى تنام؟ *",
-"*شيء من صغرك ماتغير فيك؟ *",
-"*شيء بسيط قادر يعدل مزاجك بشكل سريع؟ *",
-"*تشوف الغيره انانيه او حب؟ *",
-"*حاجة تشوف نفسك مبدع فيها؟ *",
-"*مع او ضد : يسقط جمال المراة بسبب قبح لسانها؟ *",
-"*عمرك بكيت على شخص مات في مسلسل ؟ *",
-"*‏- هل تعتقد أن هنالك من يراقبك بشغف؟ *",
-"*تدوس على قلبك او كرامتك؟ *",
-"*اكثر لونين تحبهم مع بعض؟ *",
-"*مع او ضد : النوم افضل حل لـ مشاكل الحياة؟ *",
-"*سؤال دايم تتهرب من الاجابة عليه؟ *",
-"*تحبني ولاتحب الفلوس؟ *",
-"*العلاقه السريه دايماً تكون حلوه؟ *",
-"*لو أغمضت عينيك الآن فما هو أول شيء ستفكر به؟ *",
-"*كيف ينطق الطفل اسمك؟ *",
-"*ما هي نقاط الضعف في شخصيتك؟ *",
-"*اكثر كذبة تقولها؟ *",
-"*تيكن ولا اضبطك؟ *",
-"*اطول علاقة كنت فيها مع شخص؟ *",
-"*قد ندمت على شخص؟ *",
-"*وقت فراغك وش تسوي؟ *",
-"*عندك أصحاب كثير؟ ولا ينعد بالأصابع؟ *",
-"*حاط نغمة خاصة لأي شخص؟ *",
-"*وش اسم شهرتك؟ *",
-"*أفضل أكلة تحبه لك؟ *",
-"*عندك شخص تسميه ثالث والدينك؟ *",
-"*عندك شخص تسميه ثالث والدينك؟ *",
-"*اذا قالو لك تسافر أي مكان تبيه وتاخذ معك شخص واحد وين بتروح ومين تختار؟ *",
-"*أطول مكالمة كم ساعة؟ *",
-"*تحب الحياة الإلكترونية ولا الواقعية؟ *",
-"*كيف حال قلبك ؟ بخير ولا مكسور؟ *",
-"*أطول مدة نمت فيها كم ساعة؟ *",
-"*تقدر تسيطر على ضحكتك؟ *",
-"*أول حرف من اسم الحب؟ *",
-"*تحب تحافظ على الذكريات ولا تمسحه؟ *",
-"*اسم اخر شخص زعلك؟ *",
-"*وش نوع الأفلام اللي تحب تتابعه؟ *",
-"*أنت انسان غامض ولا الكل يعرف عنك؟ *",
-"*لو الجنسية حسب ملامحك وش بتكون جنسيتك؟ *",
-"*عندك أخوان او خوات من الرضاعة؟ *",
-"*إختصار تحبه؟ *",
-"*إسم شخص وتحس أنه كيف؟ *",
-"*وش الإسم اللي دايم تحطه بالبرامج؟ *",
-"*وش برجك؟ *",
-"*لو يجي عيد ميلادك تتوقع يجيك هدية؟ *",
-"*اجمل هدية جاتك وش هو؟ *",
-"*الصداقة ولا الحب؟ *",
-"*الصداقة ولا الحب؟ *",
-"*الغيرة الزائدة شك؟ ولا فرط الحب؟ *",
-"*قد حبيت شخصين مع بعض؟ وانقفطت؟ *",
-"*وش أخر شي ضيعته؟ *",
-"*قد ضيعت شي ودورته ولقيته بيدك؟ *",
-"*تؤمن بمقولة اللي يبيك مايحتار فيك؟ *",
-"*سبب وجوك بالتليجرام؟ *",
-"*تراقب شخص حاليا؟ *",
-"*عندك معجبين ولا محد درا عنك؟ *",
-"*لو نسبة جمالك بتكون بعدد شحن جوالك كم بتكون؟ *",
-"*أنت محبوب بين الناس؟ ولاكريه؟ *",
-"*كم عمرك؟ *",
-"*لو يسألونك وش اسم امك تجاوبهم ولا تسفل فيهم؟ *",
-"*تؤمن بمقولة الصحبة تغنيك الحب؟ *",
-"*وش مشروبك المفضل؟ *",
-"*قد جربت الدخان بحياتك؟ وانقفطت ولا؟ *",
-"*أفضل وقت للسفر؟ الليل ولا النهار؟ *",
-"*انت من النوع اللي تنام بخط السفر؟ *",
-"*عندك حس فكاهي ولا نفسية؟ *",
-"*تبادل الكراهية بالكراهية؟ ولا تحرجه بالطيب؟ *",
-"*أفضل ممارسة بالنسبة لك؟ *",
-"*لو قالو لك تتخلى عن شي واحد تحبه بحياتك وش يكون؟ *",
-"*لو احد تركك وبعد فتره يحاول يرجعك بترجع له ولا خلاص؟ *",
-"*برأيك كم العمر المناسب للزواج؟ *",
-"*اذا تزوجت بعد كم بتخلف عيال؟ *",
-"*فكرت وش تسمي أول اطفالك؟ *",
-"*من الناس اللي تحب الهدوء ولا الإزعاج؟ *",
-"*الشيلات ولا الأغاني؟ *",
-"*عندكم شخص مطوع بالعايلة؟ *",
-"*تتقبل النصيحة من اي شخص؟ *",
-"*اذا غلطت وعرفت انك غلطان تحب تعترف ولا تجحد؟ *",
-"*جربت شعور احد يحبك بس انت مو قادر تحبه؟ *",
-"*دايم قوة الصداقة تكون بإيش؟ *",
-"*أفضل البدايات بالعلاقة بـ وش؟ *",
-"*وش مشروبك المفضل؟ او قهوتك المفضلة؟ *",
-"*تحب تتسوق عبر الانترنت ولا الواقع؟ *",
-"*انت من الناس اللي بعد ماتشتري شي وتروح ترجعه؟ *",
-"*أخر مرة بكيت متى؟ وليش؟ *",
-"*عندك الشخص اللي يقلب الدنيا عشان زعلك؟ *",
-"*أفضل صفة تحبه بنفسك؟ *",
-"*كلمة تقولها للوالدين؟ *",
-"*أنت من الناس اللي تنتقم وترد الاذى ولا تحتسب الأجر وتسامح؟ *",
-"*كم عدد سنينك بالتليجرام؟ *",
-"*تحب تعترف ولا تخبي؟ *",
-"*انت من الناس الكتومة ولا تفضفض؟ *",
-"*أنت بعلاقة حب الحين؟ *",
-"*عندك اصدقاء غير جنسك؟ *",
-"*أغلب وقتك تكون وين؟ *",
-"*لو المقصود يقرأ وش بتكتب له؟ *",
-"*تحب تعبر بالكتابة ولا بالصوت؟ *",
-"*عمرك كلمت فويس احد غير جنسك؟ *",
-"*لو خيروك تصير مليونير ولا تتزوج الشخص اللي تحبه؟ *",
-"*لو عندك فلوس وش السيارة اللي بتشتريها؟ *",
-"*كم أعلى مبلغ جمعته؟ *",
-"*اذا شفت احد على غلط تعلمه الصح ولا تخليه بكيفه؟ *",
-"*قد جربت تبكي فرح؟ وليش؟ *",
-"*تتوقع إنك بتتزوج اللي تحبه؟ *",
-"*ما هو أمنيتك؟ *",
-"*وين تشوف نفسك بعد خمس سنوات؟ *",
-"*لو خيروك تقدم الزمن ولا ترجعه ورا؟ *",
-"*لعبة قضيت وقتك فيه بالحجر المنزلي؟ *",
-"*تحب تطق الميانة ولا ثقيل؟ *",
-"*باقي معاك للي وعدك ما بيتركك؟ *",
-"*اول ماتصحى من النوم مين تكلمه؟ *",
-"*عندك الشخص اللي يكتب لك كلام كثير وانت نايم؟ *",
-"*قد قابلت شخص تحبه؟ وولد ولا بنت؟ *",
-"*اذا قفطت احد تحب تفضحه ولا تستره؟ *",
-"*كلمة للشخص اللي يسب ويسطر؟ *",
-"*آية من القران تؤمن فيه؟ *",
-"*تحب تعامل الناس بنفس المعاملة؟ ولا تكون أطيب منهم؟ *",
-"*حاجة ودك تغيرها هالفترة؟ *",
-"*كم فلوسك حاليا وهل يكفيك ام لا؟ *",
-"*وش لون عيونك الجميلة؟ *",
-"*من الناس اللي تتغزل بالكل ولا بالشخص اللي تحبه بس؟ *",
-"*اذكر موقف ماتنساه بعمرك؟ *",
-"*وش حاب تقول للاشخاص اللي بيدخل حياتك؟ *",
-"*ألطف شخص مر عليك بحياتك؟ *",
-"*انت من الناس المؤدبة ولا نص نص؟ *",
-"*كيف الصيد معاك هالأيام ؟ وسنارة ولاشبك؟ *",
-"*لو الشخص اللي تحبه قال بدخل حساباتك بتعطيه ولا تكرشه؟ *",
-"*أكثر شي تخاف منه بالحياه وش؟ *",
-"*اكثر المتابعين عندك باي برنامج؟ *",
-"*متى يوم ميلادك؟ ووش الهدية اللي نفسك فيه؟ *",
-"*قد تمنيت شي وتحقق؟ *",
-"*قلبي على قلبك مهما صار لمين تقولها؟ *",
-"*وش نوع جوالك؟ واذا بتغيره وش بتأخذ؟ *",
-"*كم حساب عندك بالتليجرام؟ *",
-"*متى اخر مرة كذبت؟ *",
-"*كذبت في الاسئلة اللي مرت عليك قبل شوي؟ *",
-"*تجامل الناس ولا اللي بقلبك على لسانك؟ *",
-"*قد تمصلحت مع أحد وليش؟ *",
-"*وين تعرفت على الشخص اللي حبيته؟ *",
-"*قد رقمت او احد رقمك؟ *",
-"*وش أفضل لعبته بحياتك؟ *",
-"*أخر شي اكلته وش هو؟ *",
-"*حزنك يبان بملامحك ولا صوتك؟ *",
-"*لقيت الشخص اللي يفهمك واللي يقرا افكارك؟ *",
-"*فيه شيء م تقدر تسيطر عليه ؟ *",
-"*منشن شخص متحلطم م يعجبه شيء؟ *",
-"*اكتب تاريخ مستحيل تنساه *",
-"*شيء مستحيل انك تاكله ؟ *",
-"*تحب تتعرف على ناس جدد ولا مكتفي باللي عندك ؟ *",
-"*انسان م تحب تتعامل معاه ابداً ؟ *",
-"*شيء بسيط تحتفظ فيه؟ *",
-"*فُرصه تتمنى لو أُتيحت لك ؟ *",
-"*شيء مستحيل ترفضه ؟. *",
-"*لو زعلت بقوة وش بيرضيك ؟ *",
-"*تنام بـ اي مكان ، ولا بس غرفتك ؟ *",
-"*ردك المعتاد اذا أحد ناداك ؟ *",
-"*مين الي تحب يكون مبتسم دائما ؟ *",
-"* إحساسك في هاللحظة؟ *",
-"*وش اسم اول شخص تعرفت عليه فالتلقرام ؟ *",
-"*اشياء صعب تتقبلها بسرعه ؟ *",
-"*شيء جميل صار لك اليوم ؟ *",
-"*اذا شفت شخص يتنمر على شخص قدامك شتسوي؟ *",
-"*يهمك ملابسك تكون ماركة ؟ *",
-"*ردّك على شخص قال (أنا بطلع من حياتك)؟. *",
-"*مين اول شخص تكلمه اذا طحت بـ مصيبة ؟ *",
-"*تشارك كل شي لاهلك ولا فيه أشياء ما تتشارك؟ *",
-"*كيف علاقتك مع اهلك؟ رسميات ولا ميانة؟ *",
-"*عمرك ضحيت باشياء لاجل شخص م يسوى ؟ *",
-"*اكتب سطر من اغنية او قصيدة جا فـ بالك ؟ *",
-"*شيء مهما حطيت فيه فلوس بتكون مبسوط ؟ *",
-"*مشاكلك بسبب ؟ *",
-"*نسبه الندم عندك للي وثقت فيهم ؟ *",
-"*اول حرف من اسم شخص تقوله? بطل تفكر فيني ابي انام؟ *",
-"*اكثر شيء تحس انه مات ف مجتمعنا؟ *",
-"*لو صار سوء فهم بينك وبين شخص هل تحب توضحه ولا تخليه كذا  لان مالك خلق توضح ؟ *",
-"*كم عددكم بالبيت؟ *",
-"*عادي تتزوج من برا القبيلة؟ *",
-"*أجمل شي بحياتك وش هو؟ *",
-}
-
-local srah = {
-"*صراحه  |  صوتك حلو؟ *",
-"*صراحه  |  التقيت الناس مع ابو وجهين؟ *",
-"*صراحه  |  شيء كنت تبي تحققه؟ *",
-"*صراحه  |  أنا شخص ضعيف عندما؟ *",
-"*صراحه  |  هل ترغب في إظهار حبك ومرفق لشخص أو رؤية هذا الضعف؟ *",
-"*صراحه  |  يدل على أن الكذب مرات تكون ضرورية شي؟ *",
-"*صراحه  |  أشعر بالوحدة على الرغم من أنني تحيط بك كثيرا؟ *",
-"*صراحه  |  كيفية الكشف عن من يكمن عليك؟ *",
-"*صراحه  |  إذا حاول شخص ما أن يكرهه أن يقترب منك ويهتم بك تعطيه فرصة؟ *",
-"*صراحه  |  أشجع شيء حلو في حياتك؟ *",
-'صراحه  |  طريقة جيدة يقنع حتى لو كانت الفكرة خاطئة"* توافق؟',
-"*صراحه  |  كيف تتصرف مع من يسيئون فهمك ويأخذ على ذهنه ثم ينتظر أن يرفض؟ *",
-"*صراحه  |  التغيير العادي عندما يكون الشخص الذي يحبه؟ *",
-"*صراحه  |  المواقف الصعبة تضعف لك ولا ترفع؟ *",
-"*صراحه  |  نظرة تفسد الصداقة؟ *",
-"*صراحه  |  ‏‏إذا أحد قالك كلام سيء بالغالب وش تكون ردة فعلك؟ *",
-"*صراحه  |  شخص معك بالحلوه والمُره؟ *",
-"*صراحه  |  ‏هل تحب إظهار حبك وتعلقك بالشخص أم ترى ذلك ضعف؟ *",
-"*صراحه  |  تأخذ بكلام اللي ينصحك ولا تسوي اللي تبي؟ *",
-"*صراحه  |  وش تتمنى الناس تعرف عليك؟ *",
-"*صراحه  |  ابيع المجرة عشان؟ *",
-"*صراحه  |  أحيانا احس ان الناس ، كمل؟ *",
-"*صراحه  |  مع مين ودك تنام اليوم؟ *",
-"*صراحه  |  صدفة العمر الحلوة هي اني؟ *",
-'صراحه  |  الكُره العظيم دايم يجي بعد حُب قوي "* تتفق؟',
-"*صراحه  |  صفة تحبها في نفسك؟ *",
-'صراحه  |  ‏الفقر فقر العقول ليس الجيوب "* ، تتفق؟',
-"*صراحه  |  تصلي صلواتك الخمس كلها؟ *",
-"*صراحه  |  ‏تجامل أحد على راحتك؟ *",
-"*صراحه  |  اشجع شيء سويتة بحياتك؟ *",
-"*صراحه  |  وش ناوي تسوي اليوم؟ *",
-"*صراحه  |  وش شعورك لما تشوف المطر؟ *",
-"*صراحه  |  غيرتك هاديه ولا تسوي مشاكل؟ *",
-"*صراحه  |  ما اكثر شي ندمان عليه؟ *",
-"*صراحه  |  اي الدول تتمنى ان تزورها؟ *",
-"*صراحه  |  متى اخر مره بكيت؟ *",
-"*صراحه  |  تقيم حظك ؟ من عشره؟ *",
-"*صراحه  |  هل تعتقد ان حظك سيئ؟ *",
-"*صراحه  |  شـخــص تتمنــي الإنتقــام منـــه؟ *",
-"*صراحه  |  كلمة تود سماعها كل يوم؟ *",
-"*صراحه  |  **هل تُتقن عملك أم تشعر بالممل؟ *",
-"*صراحه  |  هل قمت بانتحال أحد الشخصيات لتكذب على من حولك؟ *",
-"*صراحه  |  متى آخر مرة قمت بعمل مُشكلة كبيرة وتسببت في خسائر؟ *",
-"*صراحه  |  ما هو اسوأ خبر سمعته بحياتك؟ *",
-"*‏صراحه | هل جرحت شخص تحبه من قبل ؟ *",
-"*صراحه  |  ما هي العادة التي تُحب أن تبتعد عنها؟ *",
-"*‏صراحه | هل تحب عائلتك ام تكرههم؟ *",
-"*‏صراحه  |  من هو الشخص الذي يأتي في قلبك بعد الله – سبحانه وتعالى- ورسوله الكريم – صلى الله عليه وسلم؟ *",
-"*‏صراحه  |  هل خجلت من نفسك من قبل؟ *",
-"*‏صراحه  |  ما هو ا الحلم  الذي لم تستطيع ان تحققه؟ *",
-"*‏صراحه  |  ما هو الشخص الذي تحلم به كل ليلة؟ *",
-"*‏صراحه  |  هل تعرضت إلى موقف مُحرج جعلك تكره صاحبهُ؟ *",
-"*‏صراحه  |  هل قمت بالبكاء أمام من تُحب؟ *",
-"*‏صراحه  |  ماذا تختار حبيبك أم صديقك؟ *",
-"*‏صراحه  | هل حياتك سعيدة أم حزينة؟ *",
-"*صراحه  |  ما هي أجمل سنة عشتها بحياتك؟ *",
-"*‏صراحه  |  ما هو عمرك الحقيقي؟ *",
-"*‏صراحه  |  ما اكثر شي ندمن عليه؟ *",
-"*صراحه  |  ما هي أمنياتك المُستقبلية؟‏ *",
-"*صراحه | نفسك فـ ايه ؟ *",
-"*صراحه | هل تحب فتاه او احببت من قبل ؟ *",
-"*صراحه | هل شكلك حلو او جيد او متوسط او سئ ؟ *",
-"*صراحه | ما هي الماده الدراسيه التي تحبها اكثر وتفضلها؟ *",
-"*صراحه | هل تحب مدرستك ؟ *",
-"*صراحه | ما الشئ الذي تتمني ان يحصل ؟ *",
-"*صراحه | هل تحب عائلتك ؟ *",
-}
-
-local ker = {
-"*لو خيروك |  بين الإبحار لمدة أسبوع كامل أو السفر على متن طائرة لـ 3 أيام متواصلة؟ *",
-"*لو خيروك |  بين شراء منزل صغير أو استئجار فيلا كبيرة بمبلغ معقول؟ *",
-"*لو خيروك |  أن تعيش قصة فيلم هل تختار الأكشن أو الكوميديا؟ *",
-"*لو خيروك |  بين تناول البيتزا وبين الآيس كريم وذلك بشكل دائم؟ *",
-"*لو خيروك |  بين إمكانية تواجدك في الفضاء وبين إمكانية تواجدك في البحر؟ *",
-"*لو خيروك |  بين تغيير وظيفتك كل سنة أو البقاء بوظيفة واحدة طوال حياتك؟ *",
-"*لو خيروك |  أسئلة محرجة أسئلة صراحة ماذا ستختار؟ *",
-"*لو خيروك |  بين الذهاب إلى الماضي والعيش مع جدك أو بين الذهاب إلى المستقبل والعيش مع أحفادك؟ *",
-"*لو كنت شخص آخر هل تفضل البقاء معك أم أنك ستبتعد عن نفسك؟ *",
-"*لو خيروك |  بين الحصول على الأموال في عيد ميلادك أو على الهدايا؟ *",
-"*لو خيروك |  بين القفز بمظلة من طائرة أو الغوص في أعماق البحر؟ *",
-"*لو خيروك |  بين الاستماع إلى الأخبار الجيدة أولًا أو الاستماع إلى الأخبار السيئة أولًا؟ *",
-"*لو خيروك |  بين أن تكون رئيس لشركة فاشلة أو أن تكون موظف في شركة ناجحة؟ *",
-"*لو خيروك |  بين أن يكون لديك جيران صاخبون أو أن يكون لديك جيران فضوليون؟ *",
-"*لو خيروك |  بين أن تكون شخص مشغول دائمًا أو أن تكون شخص يشعر بالملل دائمًا؟ *",
-"*لو خيروك |  بين قضاء يوم كامل مع الرياضي الذي تشجعه أو نجم السينما الذي تحبه؟ *",
-"*لو خيروك |  بين استمرار فصل الشتاء دائمًا أو بقاء فصل الصيف؟ *",
-"*لو خيروك |  بين العيش في القارة القطبية أو العيش في الصحراء؟ *",
-"*لو خيروك |  بين أن تكون لديك القدرة على حفظ كل ما تسمع أو تقوله وبين القدرة على حفظ كل ما تراه أمامك؟ *",
-"*لو خيروك |  بين أن يكون طولك 150 سنتي متر أو أن يكون 190 سنتي متر؟ *",
-"*لو خيروك |  بين إلغاء رحلتك تمامًا أو بقائها ولكن فقدان الأمتعة والأشياء الخاص بك خلالها؟ *",
-"*لو خيروك |  بين أن تكون اللاعب الأفضل في فريق كرة فاشل أو أن تكون لاعب عادي في فريق كرة ناجح؟ *",
-"*لو خيروك |  بين ارتداء ملابس البيت لمدة أسبوع كامل أو ارتداء البدلة الرسمية لنفس المدة؟ *",
-"*لو خيروك |  بين امتلاك أفضل وأجمل منزل ولكن في حي سيء أو امتلاك أسوأ منزل ولكن في حي جيد وجميل؟ *",
-"*لو خيروك |  بين أن تكون غني وتعيش قبل 500 سنة، أو أن تكون فقير وتعيش في عصرنا الحالي؟ *",
-"*لو خيروك |  بين ارتداء ملابس الغوص ليوم كامل والذهاب إلى العمل أو ارتداء ملابس جدك/جدتك؟ *",
-"*لو خيروك |  بين قص شعرك بشكل قصير جدًا أو صبغه باللون الوردي؟ *",
-"*لو خيروك |  بين أن تضع الكثير من الملح على كل الطعام بدون علم أحد، أو أن تقوم بتناول شطيرة معجون أسنان؟ *",
-"*لو خيروك |  بين قول الحقيقة والصراحة الكاملة مدة 24 ساعة أو الكذب بشكل كامل مدة 3 أيام؟ *",
-"*لو خيروك |  بين تناول الشوكولا التي تفضلها لكن مع إضافة رشة من الملح والقليل من عصير الليمون إليها أو تناول ليمونة كاملة كبيرة الحجم؟ *",
-"*لو خيروك |  بين وضع أحمر الشفاه على وجهك ما عدا شفتين أو وضع ماسكارا على شفتين فقط؟ *",
-"*لو خيروك |  بين الرقص على سطح منزلك أو الغناء على نافذتك؟ *",
-"*لو خيروك |  بين تلوين شعرك كل خصلة بلون وبين ارتداء ملابس غير متناسقة لمدة أسبوع؟ *",
-"*لو خيروك |  بين تناول مياه غازية مجمدة وبين تناولها ساخنة؟ *",
-"*لو خيروك |  بين تنظيف شعرك بسائل غسيل الأطباق وبين استخدام كريم الأساس لغسيل الأطباق؟ *",
-"*لو خيروك |  بين تزيين طبق السلطة بالبرتقال وبين إضافة البطاطا لطبق الفاكهة؟ *",
-"*لو خيروك |  بين اللعب مع الأطفال لمدة 7 ساعات أو الجلوس دون فعل أي شيء لمدة 24 ساعة؟ *",
-"*لو خيروك |  بين شرب كوب من الحليب أو شرب كوب من شراب عرق السوس؟ *",
-"*لو خيروك |  بين الشخص الذي تحبه وصديق الطفولة؟ *",
-"*لو خيروك |  بين أمك وأبيك؟ *",
-"*لو خيروك |  بين أختك وأخيك؟ *",
-"*لو خيروك |  بين نفسك وأمك؟ *",
-"*لو خيروك |  بين صديق قام بغدرك وعدوك؟ *",
-"*لو خيروك |  بين خسارة حبيبك/حبيبتك أو خسارة أخيك/أختك؟ *",
-"*لو خيروك |  بإنقاذ شخص واحد مع نفسك بين أمك أو ابنك؟ *",
-"*لو خيروك |  بين ابنك وابنتك؟ *",
-"*لو خيروك |  بين زوجتك وابنك/ابنتك؟ *",
-"*لو خيروك |  بين جدك أو جدتك؟ *",
-"*لو خيروك |  بين زميل ناجح وحده أو زميل يعمل كفريق؟ *",
-"*لو خيروك |  بين لاعب كرة قدم مشهور أو موسيقي مفضل بالنسبة لك؟ *",
-"*لو خيروك |  بين مصور فوتوغرافي جيد وبين مصور سيء ولكنه عبقري فوتوشوب؟ *",
-"*لو خيروك |  بين سائق سيارة يقودها ببطء وبين سائق يقودها بسرعة كبيرة؟ *",
-"*لو خيروك |  بين أستاذ اللغة العربية أو أستاذ الرياضيات؟ *",
-"*لو خيروك |  بين أخيك البعيد أو جارك القريب؟ *",
-"*لو خيروك |  يبن صديقك البعيد وبين زميلك القريب؟ *",
-"*لو خيروك |  بين رجل أعمال أو أمير؟ *",
-"*لو خيروك |  بين نجار أو حداد؟ *",
-"*لو خيروك |  بين طباخ أو خياط؟ *",
-"*لو خيروك |  بين أن تكون كل ملابس بمقاس واحد كبير الحجم أو أن تكون جميعها باللون الأصفر؟ *",
-"*لو خيروك |  بين أن تتكلم بالهمس فقط طوال الوقت أو أن تصرخ فقط طوال الوقت؟ *",
-"*لو خيروك |  بين أن تمتلك زر إيقاف موقت للوقت أو أن تمتلك أزرار للعودة والذهاب عبر الوقت؟ *",
-"*لو خيروك |  بين أن تعيش بدون موسيقى أبدًا أو أن تعيش بدون تلفاز أبدًا؟ *",
-"*لو خيروك |  بين أن تعرف متى سوف تموت أو أن تعرف كيف سوف تموت؟ *",
-"*لو خيروك |  بين العمل الذي تحلم به أو بين إيجاد شريك حياتك وحبك الحقيقي؟ *",
-"*لو خيروك |  بين معاركة دب أو بين مصارعة تمساح؟ *",
-"*لو خيروك |  بين إما الحصول على المال أو على المزيد من الوقت؟ *",
-"*لو خيروك |  بين امتلاك قدرة التحدث بكل لغات العالم أو التحدث إلى الحيوانات؟ *",
-"*لو خيروك |  بين أن تفوز في اليانصيب وبين أن تعيش مرة ثانية؟ *",
-"*لو خيروك |  بأن لا يحضر أحد إما لحفل زفافك أو إلى جنازتك؟ *",
-"*لو خيروك |  بين البقاء بدون هاتف لمدة شهر أو بدون إنترنت لمدة أسبوع؟ *",
-"*لو خيروك |  بين العمل لأيام أقل في الأسبوع مع زيادة ساعات العمل أو العمل لساعات أقل في اليوم مع أيام أكثر؟ *",
-"*لو خيروك |  بين مشاهدة الدراما في أيام السبعينيات أو مشاهدة الأعمال الدرامية للوقت الحالي؟ *",
-"*لو خيروك |  بين التحدث عن كل شيء يدور في عقلك وبين عدم التحدث إطلاقًا؟ *",
-"*لو خيروك |  بين مشاهدة فيلم بمفردك أو الذهاب إلى مطعم وتناول العشاء بمفردك؟ *",
-"*لو خيروك |  بين قراءة رواية مميزة فقط أو مشاهدتها بشكل فيلم بدون القدرة على قراءتها؟ *",
-"*لو خيروك |  بين أن تكون الشخص الأكثر شعبية في العمل أو المدرسة وبين أن تكون الشخص الأكثر ذكاءً؟ *",
-"*لو خيروك |  بين إجراء المكالمات الهاتفية فقط أو إرسال الرسائل النصية فقط؟ *",
-"*لو خيروك |  بين إنهاء الحروب في العالم أو إنهاء الجوع في العالم؟ *",
-"*لو خيروك |  بين تغيير لون عينيك أو لون شعرك؟ *",
-"*لو خيروك |  بين امتلاك كل عين لون وبين امتلاك نمش على خديك؟ *",
-"*لو خيروك |  بين الخروج بالمكياج بشكل مستمر وبين الحصول على بشرة صحية ولكن لا يمكن لك تطبيق أي نوع من المكياج؟ *",
-"*لو خيروك |  بين أن تصبحي عارضة أزياء وبين ميك آب أرتيست؟ *",
-"*لو خيروك |  بين مشاهدة كرة القدم أو متابعة الأخبار؟ *",
-"*لو خيروك |  بين موت شخصية بطل الدراما التي تتابعينها أو أن يبقى ولكن يكون العمل الدرامي سيء جدًا؟ *",
-"*لو خيروك |  بين العيش في دراما قد سبق وشاهدتها ماذا تختارين بين الكوميديا والتاريخي؟ *",
-"*لو خيروك |  بين امتلاك القدرة على تغيير لون شعرك متى تريدين وبين الحصول على مكياج من قبل خبير تجميل وذلك بشكل يومي؟ *",
-"*لو خيروك |  بين نشر تفاصيل حياتك المالية وبين نشر تفاصيل حياتك العاطفية؟ *",
-"*لو خيروك |  بين البكاء والحزن وبين اكتساب الوزن؟ *",
-"*لو خيروك |  بين تنظيف الأطباق كل يوم وبين تحضير الطعام؟ *",
-"*لو خيروك |  بين أن تتعطل سيارتك في نصف الطريق أو ألا تتمكنين من ركنها بطريقة صحيحة؟ *",
-"*لو خيروك |  بين إعادة كل الحقائب التي تملكينها أو إعادة الأحذية الجميلة الخاصة بك؟ *",
-"*لو خيروك |  بين قتل حشرة أو متابعة فيلم رعب؟ *",
-"*لو خيروك |  بين امتلاك قطة أو كلب؟ *",
-"*لو خيروك |  بين الصداقة والحب *",
-"*لو خيروك |  بين تناول الشوكولا التي تحبين طوال حياتك ولكن لا يمكنك الاستماع إلى الموسيقى وبين الاستماع إلى الموسيقى ولكن لا يمكن لك تناول الشوكولا أبدًا؟ *",
-"*لو خيروك |  بين مشاركة المنزل مع عائلة من الفئران أو عائلة من الأشخاص المزعجين الفضوليين الذين يتدخلون في كل كبيرة وصغيرة؟ *",
-}
-local mkl = {
-"• {  *يلا - اكتب - اول - مقال - في - بوت - جعفر - الصملاوي - وره - سرعتك* }",
-"• {  *اول - مقال - نشوف - من - الاسرع - في - القروب - والاقدح* }",
-"• {  *يلا - اكتب - خلينا - نشوف - سرعتك - يا - بطل - انتبه - تخسر - ذا - المقال* }",
-"• {  *للحين - المستوى - فاشل - ما - اشوف مستوى - خلك - اسرع - السارعين - يا - وحش* }",
-"• {  *وحش - وحش - مستواك - اسطوري - بس - صعبه - عليك - تطوفني* }",
-"• {  *راح - تصمل - مافيه - هروب - يلا - حاول تطوفني - يا - بطوط* }",
-"• {  *اذا - انت - تشوف - نفسك - منجد - سريع ؟ - حاول - ما - تخسر - ذي - المقاله* }",
-"• {  *شوف - للحين - مطوفك - وكاسر - عينك - والقروب - كله - شاهد* }",
-"• {  *يلا - مستوى - يا - وحش - يا - اسطوره - اكتب - مقال - سريع - جداً* }",
-"• {  *نبي - لعب - نظيف - بدون - نسخ - وبعص* }",
-"• {  *اكتب - اكتب - معي - خلك - طياره - خلك - اسطوره - اصدمهم - بسرعتك* }",
-"• {  *اصدم - خصمك - بسرعتك - خلك - اسطوره - يا - وحش - تعب - خصمك* }",
-"• {  *الي - يسولف - واجد - وما - يلعب - يقلب - وجه - نبي - لعب - مرتب - شريف - قوي* }",
-"• {  *شوف - كيف - بدعس - عليك - واطوفك - وامحطك - راقب - وتعلم* }",
-"• {  *يلا - ذا - المقال - مقالك - اكسر - عين - خصمك - لعيون - بوت - جعفر* }",
-"• {  *العب - العب - صدقني - مدعوس - عليك - يا - بطه - طور - من - مستواك* }",
-"• {  *اسرع - اسرع - انتبه - يضحكون - عليك - تكون - مصخره - اي - احد - يجي - يدعسك* }",
-"• {  *مقال - ضد - التكليج - حاول - تاخذه - بدون - ولا - كلجه - يا - اسطوري* }",
-"• {  *مافيه - انسحاب - راح - تلعب - يعني - راح - تلعب - صمله - يعني - صمله* }",
-"• {  *اكتب - بدون طلسمه - سيطر - على - كيبوردك - يلا - يا - وحش* }",
-"• {  *اي - احد - راح - يبعص - اللعب - راح - ينطرد - برا - القروب* }",
-"• {  *يلا - مستوى - يا - وحش - يا - اسطوره - اكتب - مقال - سريع -* }",
-"• {  *ماتقدر - تطوفني - صاحي - انت - ما - تعرفني - يسموني - كنق - المقالات - وفحل - الكيبورد* }",
-"• {  *هيا - ذا - المقال - مقالك - ذا - المقال - لك - لا - تخلي - احد - ياخذه* }",
-"• {  *يلا - يا - وحش - ادعس - خصمك - لا - تفشل - نفسك - لا - تخلي - احد - يطوفك* }",
-"• {  *لو - كان - مستواك - في - الكتابه - ضعيف - حاول - تلعب - مقالات - كثير - عشان - تطور - من - مستواك* }",
-"• {  *كم - مره - نقلك - لا - تكلج - العب - زين - ولا - ضف - وجهك* }",
-"• {  *اقلك - ماراح - تقدر - تطوفني - صدقني - تراك - بطه - سامع - يا - بطيء* }",
-"• {  *طور - من - مستواك - وارجع - حاول - تجاريني - يا - بطوط - مستواك - زق - الصراحه - وجدا - جدا* }",
-"• {  *خليك - اسرع - واحد - في - القروب* }",
-"• {  *دعستك - صح - طوفتك - صح - ماقدرت - علي - صح - ماراح - تقدر - يا - هطف* }",
-"• {  *راح - تتعب - معي - العب - شوف - كيف - بكل - جوله - اكسر - عينك* }",
-"• {  *وضعك - يفشل - كل - من - جا - يطوفك - سلامات - اسرع - اسرع* }",
-"• {  *العب - بتركيز - وبنفس - الوقت - بسرعه - يلا - ورنا - تقدر - او - لا* }", 
-"• {  *هيا - قم - ورنا - كيف - تكتب - كيف - تدعس - عليهم - يا - طياره* }",
-"• {  *اول - مقال - نشوف - من - الاسرع - في - القروب - والاقدح* }",
-"• {  *يلا - اكتب - اول - مقال - في - بوت - جعفر - الصملاوي - وره - سرعتك* }",
-"• {  *المقال - يبي - له - واحد - يلعب - بسرعه - ويتنجب - الهبد* }",
-"• {  *اقلك - ماراح - تقدر - تطوفني - صدقني - تراك - بطه - سامع - يا - بطيء - هذا المقال - رقم - 30* }",
-"• {  *اكره - شيء - الي - يحط - لك - بيسات - يعني - وش - وضعك - يا - لحجي* }",
-"• {  *هيا - قم - ورنا - كيف - تكتب - كيف - تدعس - عليهم - يا - طياره* }",
-"• {  *يلا - مقال - لعيونك - ولعيون - خصمك - نشوف - من - يدعس - الثاني* }",
-"• {  *لو - عجزت - تطوفني - بتصمل - معي - لين - تطوفني - يا - بطيء* }",
-"• {  *المقال - يبي - له - واحد - يلعب - بسرعه - ويتنجب - الهبد* }",
-"• {  *الصراحه - وذا - مستواك - عيب - احطك - خصم - برا - يا - بطه* }",
-"• {  *يلا - ذي - الجولة - باسمك - اكسبها - عشان - تثبت - لاعضاء - القروب - انك - قوي* }",
-"• {  *طيب - الحين - خلك - سريع - واكسب - ذا - المقال - بدون - كلج* }",
-"• {  *شوف - حتى - وانا - بوت - قاعد - اشوفك - تنجلد - عيب - عليك - ياخي* }",
-"• {  *للحين - المستوى - فاشل - ما - اشوف مستوى - خلك - اسرع - السارعين - يا - وحش* }",
-"• {  *يلا - اكتب - خلينا - نشوف - سرعتك - يا - بطل - انتبه - تخسر - ذا - المقال* }",
-"• {  *اكتب - اكتب - معي - خلك - طياره - خلك - اسطوره - اصدمهم - بسرعتك* }",
-"• {  *مقال - بين - اثنين - ون - في - ون - نشوف - من - راح - يكسر - عين - الثاني* }",
-"• {  *العب - شوي - نشوف - بتقدر - تطوفني - او - بتاكل - زق - امزح - حلاوه* }",
-"• {  *طيب - حاول - تطوفني - الحين - بهاذا - المقال - القصير* }",
-"• {  *تشوف - نفسك - سريع - امش - العب - واختبر - سرعتك - طيب* }",
-"• {  *اقول - امش - العب - معي - اعلمك - كيف - تكتب - وامحطك* }",
-"• {  *اكتب - سريع - اسرع - من - السريع - يا - سريع - يا - اسرع - من - السارعين* }",
-"• {  *يلا - نلعب - ونشوف - مين - اقوى - واسرع - واحد* }",
-"• {  *العب - بتركيز - وبسرعه - ركز - لا - تنلخم - يا - وحش* }",
-"• {  *يلا - ادعس - خصمك - خله - يندم - انه - لعب - مع - شخص - قوي - مثلك* }",
-"• {  *المقال - هاذا - مقال - قصير - بس - بخليه - شوي - طويل* }",
-"• {  *تبي - يتطور - مستواك - حاول - تلعب - مقالات - كثير - تصير - سريع* }",
-"• {  *خليك - كفو - لو - مره - وحده - وحاول - تسيطر - على - كيبوردك - يا - طلسومي* }",
-"• {  *طيب - يلا - يا - مسكين - تقول - تبي - تطوفني - صدقني - ما - بتقدر - يا - هطف* }",
-"• {  *لما - تهابد - على - الكيبورد - راح - تخسر - المقال - هديها - شوي* }",
-"• {  *ارحم - كيبوردك - بشويش - عليه - مسكين - كذا - حتى - المقال - تخسره* }",
-"• {  *الكل - يدري - انك - اسرع - واحد - واقوى - واحد - اقول - العب - لا - تصدق - نفسك* }",
-"• {  *وش - فيك - مرتبك - وخايف - روق - خذ - نفس - عميق - العب - مقال - هادي* }",
-"• {  *يلا - ذا - المقال - مقالك - شوف - خصمك - حاط - عينه - عليه - انتبه - ياخذه* }",
-"• {  *مستواك - قوي - وخصمك - اقوى - يعني - منافسه - قويه - اثبت - لهم - انك - اقوى* }",
-"• {  *يعمري - مستواك - حلو - مستواك - اسطوري - ابهرهم - اكثر - هيا* }",
-"• {  *مقال - يقال - فيه - انه - اقوى - مقال* }",
-"• {  *هاي - هلا - باي* }",
-"• {  *انا - اقول - كمل - لعب - حتى - لو - اندعس - عليك - طور - مستواك - يلا* }",
-"• {  *اليوم - يندعس - عليك - بكرا - تدعس - عليهم - لا - تفقد - الامل - دنيا - دواره* }",
-"• {  *يا - مدري - وش - اسمك - العب - شفيك - خايف - ما - تقدر - تجاريني - صح* }",
-"• {  *بل - بل - مغير - هبد - على - الكيبورد - القروب - قلب - كله - سحر - وش - ذا* }",
-"• {  *اسمع - اسمع - اكتب - بسرعه - ياخي - شفيك - بطيء - شفيك - سريع* }",
-"• {  *اكسب - ذا - المقال - بكل - قوه - ابتجح - وادعسهم - يلا - يا - وحش* }",
-"• {  *يا - حبيبي - شفيك - تطلسم - سلامات - يلا - اكتب - بدون - طلسمه* }",
-"• {  *بسم - الله - ذا - المقال - بتاخذه - غصب - عنهم - يلا - يا - حلو* }",
-"• {  *العب - لعب - قوي - اسطوري - العب - اكسر - عين - اي - احد - يلعب - معك* }",
-}
-
 local bott = {
-"*انت البوت*",
-"*يا روح قلب البوت*",
-"*تفضل عيـني❤*",
-"عيـونـي لك.",
-"حيـاة البوت.",
+"*تفضل*",
+"*امرني*",
+"*نعم تفضل معك البوت[".. Bot_Name.. "] *",
+"امرني",
+"تفضل.",
 "اسمي ["..Bot_Name.."] .",
 }
 
 local su = {
-"اهلا بمطوري الحلو ..",
-"ارحب يالمطور.",
+"اهلا",
+"تفضل",
 "هلا .",
 "عيون ["..Bot_Name.."] .",
-"ارحب ."
+"امر"
 }
 local ss97 = {
-"روح [".. Bot_Name.."].",
-"امرني يعيني .",
-"امرني .","نعم","هاه.","شفيه",
-"لبييه .","عيوني لك.","امرني يا حلو.",
-"ها يا روحي.","هلا .","شتبغى.",
-"عيون ["..Bot_Name.."] .",
-}
-
-local bs = {
-"يع اي القرف ده يعم شوفلنا حد عدل.",
-"اووف هي دي الشفايف.",
-"الوش مش مساعد.",
-"هفرتك شفايفك.",
+"نعم معك [".. Bot_Name.."].",
+"امرني .",
+"امرني .","نعم","تفضل.","امرني",
+"لبييه .","اهلا.","امرني معك [.. Bot_Name..] ",
+"امرني","هلا .","تفضل.",
+"تفضل ["..Bot_Name.."] .",
 }
 
 local Text = msg.text
@@ -7525,42 +6478,7 @@ return sendMsg(msg.chat_id_,msg.id_,su[math.random(#su)])
 elseif not msg.SudoUser and Text== Bot_Name and not Text2 then  
 return sendMsg(msg.chat_id_,msg.id_,ss97[math.random(#ss97)])
 
-elseif Text:match("^قول (.*)$") then
-if utf8.len(Text:match("^قول (.*)$")) > 100 then 
-return sendMsg(msg.chat_id_,msg.id_,"♔ ماقدرش اقول اكتر من 100 حرف .")
-end
-local callback_Text = FlterName(Text:match("^قول (.*)$"),100)
-if callback_Text and callback_Text == 'الاسم سبام ' then
-return sendMsg(msg.chat_id_,msg.id_,"♔ للاسف النص هذا مخالف ")
-else
-return sendMsg(msg.chat_id_,0,callback_Text) 
-end
 
-elseif Text:match("^بوس (.*)$") then 
-if msg.reply_id then 
-return sendMsg(msg.chat_id_,msg.reply_id,bs[math.random(#bs)])
-else
-return sendMsg(msg.chat_id_,msg.id_,"ابوس مين بقا اعملو رد.")
-end 
-
-elseif not msg.SudoUser and Text==" خيروك" then
-sendMsg(msg.chat_id_,msg.id_,ker[math.random(#ker)])
-elseif not msg.SudoUser and Text==" حروف" or Text == "حروف" or Text == " حر" or Text == "حر" then
-sendMsg(msg.chat_id_,msg.id_,hhh[math.random(#hhh)])
-
-elseif not msg.SudoUser and Text=="كت" or Text == "كت تويت" or Text == "كت" or Text == "تويت" then
-sendMsg(msg.chat_id_,msg.id_,drok[math.random(#drok)])
-elseif not msg.SudoUser and Text==" مقالات" or Text == "مقالات" or Text == " 0" or Text == "0" then
-
-sendMsg(msg.chat_id_,msg.id_,mkl[math.random(#mkl)])
-elseif not msg.SudoUser and Text==" صراحه" or Text == "صراحه" then
-sendMsg(msg.chat_id_,msg.id_,srah[math.random(#srah)])
-
-
-elseif not msg.SudoUser and Text=="بوت" or Text == "البوت" or Text == "بوت" then
-sendMsg(msg.chat_id_,msg.id_,bott[math.random(#bott)])
-
-elseif Text== "مطور السورس" or Text== "سالم" or Text== "هيل" or Text== "ابو عمير" or Text== "عمير" or Text== "أبو عمير" then return sendMsg(msg.chat_id_,msg.id_,"[سـالِم.](T.ME/vorcl)")
 elseif Text== "ايديي" or Text=="ايدي 🆔" then 
 GetUserID(msg.sender_user_id_,function(arg,data)
 if data.username_ then USERNAME = '@'..data.username_ else USERNAME = FlterName(data) end
@@ -7576,17 +6494,17 @@ return sendMsg(msg.chat_id_,msg.id_,[[
 ¦ـ  https://telegram.org/deactivate
 ]] )
 --=====================================
-elseif Text== "انا مين" or Text== "مين انا" then
+elseif Text== "شغال" or Text== "شغال" then
 if msg.SudoUser then  
-return sendMsg(msg.chat_id_,msg.id_,"*مطوري يالحبيب*")
+return sendMsg(msg.chat_id_,msg.id_,"*نعــم 👌🏻💯*")
 elseif msg.Creator then 
-return sendMsg(msg.chat_id_,msg.id_,"*المنشئ تاج راسي*")
+return sendMsg(msg.chat_id_,msg.id_,"*نعــم 👌🏻💯*")
 elseif msg.Director then 
-return sendMsg(msg.chat_id_,msg.id_,"*مدير المجموعه الهيبه*")
+return sendMsg(msg.chat_id_,msg.id_,"*نعــم 👌🏻💯*")
 elseif msg.Admin then 
-return sendMsg(msg.chat_id_,msg.id_,"*فقط ادمن*")
+return sendMsg(msg.chat_id_,msg.id_,"*نعــم 👌🏻💯*")
 else 
-return sendMsg(msg.chat_id_,msg.id_,"*مجرد عضو وكلنا نحبك*")
+return sendMsg(msg.chat_id_,msg.id_,"*نعــم 👌🏻💯*")
 end 
 end 
 
